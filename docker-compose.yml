@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  markdown-editor:
+  scratch:
     build: .
     ports:
       - "8080:80"
     restart: always
-    container_name: markdown-editor
+    container_name: scratch

@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --editor-bg: #1e1e1e;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+@layer base {
+  :root {
+    --bg-color: #ffffff;
+    --editor-bg: #f8fafc;
+    --fg-color: #0f172a;
+    --primary-color: #3b82f6;
+    --border-color: #e2e8f0;
+    --surface-color: #f8fafc;
+    --surface-highlight: #f1f5f9;
+  }
+
+  .theme-dark {
+    --bg-color: #0f172a;
+    --editor-bg: #020617;
+    --fg-color: #f1f5f9;
+    --primary-color: #3b82f6;
+    --border-color: #1e293b;
+    --surface-color: #1e293b;
+    --surface-highlight: #334155;
+  }
+
+  .theme-monokai {
+    --bg-color: #272822;
+    --editor-bg: #1e1f1a;
+    --fg-color: #f8f8f2;
+    --primary-color: #a6e22e;
+    --border-color: #3e3d32;
+    --surface-color: #3e3d32;
+    --surface-highlight: #49483e;
+  }
+
+  .theme-dracula {
+    --bg-color: #282a36;
+    --editor-bg: #21222c;
+    --fg-color: #f8f8f2;
+    --primary-color: #ff79c6;
+    --border-color: #44475a;
+    --surface-color: #44475a;
+    --surface-highlight: #6272a4;
+  }
+
+  .theme-nord {
+    --bg-color: #2e3440;
+    --editor-bg: #242933;
+    --fg-color: #d8dee9;
+    --primary-color: #88c0d0;
+    --border-color: #3b4252;
+    --surface-color: #3b4252;
+    --surface-highlight: #434c5e;
+  }
+
+  .theme-solarized {
+    --bg-color: #002b36;
+    --editor-bg: #00212b;
+    --fg-color: #839496;
+    --primary-color: #2aa198;
+    --border-color: #073642;
+    --surface-color: #073642;
+    --surface-highlight: #586e75;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--fg-color);
+    transition: background-color 0.3s, color 0.3s;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--surface-highlight);
+}

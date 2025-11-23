@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Search } from 'lucide-react';
+import { emojiCategories, type Emoji } from '../data/emojis';
 
 interface EmojiPickerProps {
     isOpen: boolean;
@@ -7,27 +8,24 @@ interface EmojiPickerProps {
     onSelect: (emoji: string) => void;
 }
 
-const emojiCategories: Record<string, string[]> = {
-    'Smileys': ['😀', '😃', '😄', '😁', '😅', '😂', '🤣', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎'],
-    'Gestures': ['👍', '👎', '👊', '✊', '🤛', '🤜', '🤞', '✌️', '🤟', '🤘', '👌', '🤌', '🤏', '👈', '👉', '👆', '👇', '☝️', '👋', '🤚', '🖐️', '✋', '🖖', '👏', '🙌', '👐'],
-    'People': ['👶', '👧', '👦', '👨', '👩', '🧑', '👴', '👵', '🧓', '👨‍💼', '👩‍💼', '👨‍🎓', '👩‍🎓', '👨‍⚕️', '👩‍⚕️', '👨‍🔬', '👩‍🔬', '👨‍💻', '👩‍💻', '👨‍🎨', '👩‍🎨'],
-    'Animals': ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🐤', '🦆', '🦅', '🦉', '🦇', '🐺', '🐗', '🐴', '🦄'],
-    'Food': ['🍎', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝', '🍅', '🥑', '🍆', '🥔', '🥕', '🌽', '🌶️', '🥒', '🥬', '🥦', '🍞', '🥐', '🥖'],
-    'Activities': ['⚽', '🏀', '🏈', '⚾', '🥎', '🎾', '🏐', '🏉', '🥏', '🎱', '🏓', '🏸', '🏒', '🏑', '🥍', '🏏', '🥅', '⛳', '🏹', '🎣', '🥊', '🥋', '🎽', '🛹', '🛼', '🎿', '⛷️'],
-    'Objects': ['⌚', '📱', '💻', '⌨️', '🖥️', '🖨️', '🖱️', '💾', '💿', '📀', '📼', '📷', '📸', '📹', '🎥', '📞', '☎️', '📟', '📠', '📺', '📻', '🎙️', '🎚️', '🎛️', '🧭', '⏰', '⌛'],
-    'Symbols': ['❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔', '❣️', '💕', '💞', '💓', '💗', '💖', '💘', '💝', '⭐', '🌟', '✨', '💫', '💥', '💢', '💦', '💨', '🔥']
-};
-
 export function EmojiPicker({ isOpen, onClose, onSelect }: EmojiPickerProps) {
     const [search, setSearch] = useState('');
 
     const filteredCategories = useMemo(() => {
         try {
             if (!search) return Object.entries(emojiCategories);
+
             const lowerSearch = search.toLowerCase();
-            return Object.entries(emojiCategories).filter(([category]) =>
-                category.toLowerCase().includes(lowerSearch)
+            const allEmojis = Object.values(emojiCategories).flat();
+
+            const matchingEmojis = allEmojis.filter(emoji =>
+                emoji.name.toLowerCase().includes(lowerSearch) ||
+                emoji.keywords.some(keyword => keyword.toLowerCase().includes(lowerSearch))
             );
+
+            if (matchingEmojis.length === 0) return [];
+
+            return [['Search Results', matchingEmojis]] as [string, Emoji[]][];
         } catch (e) {
             console.error("Error filtering emojis:", e);
             return [];
@@ -53,7 +51,7 @@ export function EmojiPicker({ isOpen, onClose, onSelect }: EmojiPickerProps) {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-fg/50" size={18} />
                         <input
                             type="text"
-                            placeholder="Search categories..."
+                            placeholder="Search emojis..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             className="w-full bg-surface pl-10 pr-4 py-2 rounded-lg border border-border focus:border-primary outline-none text-fg placeholder:text-fg/50"
@@ -76,12 +74,12 @@ export function EmojiPicker({ isOpen, onClose, onSelect }: EmojiPickerProps) {
                                 <div className="grid grid-cols-8 gap-2">
                                     {Array.isArray(emojis) && emojis.map((emoji, index) => (
                                         <button
-                                            key={`${emoji}-${index}`}
-                                            onClick={() => handleEmojiClick(emoji)}
+                                            key={`${emoji.char}-${index}`}
+                                            onClick={() => handleEmojiClick(emoji.char)}
                                             className="text-2xl hover:bg-surface-highlight rounded-lg p-2 transition-all hover:scale-110 active:scale-95"
-                                            title={emoji}
+                                            title={emoji.name}
                                         >
-                                            {emoji}
+                                            {emoji.char}
                                         </button>
                                     ))}
                                 </div>
@@ -89,7 +87,7 @@ export function EmojiPicker({ isOpen, onClose, onSelect }: EmojiPickerProps) {
                         ))
                     ) : (
                         <div className="text-center text-fg/50 py-8">
-                            No categories found
+                            No emojis found
                         </div>
                     )}
                 </div>

@@ -25,11 +25,6 @@ export function Footer({ line, column, wordCount, charCount, selectionCount, tot
                         <span>{selectionCount} selected</span>
                     </div>
                 )}
-                <div className="w-px h-3 bg-border" />
-                <div className="flex items-center gap-2">
-                    <List size={12} />
-                    <span>{totalLines} lines</span>
-                </div>
             </div>
 
             <div className="font-medium text-fg/80">
@@ -47,6 +42,9 @@ export function Footer({ line, column, wordCount, charCount, selectionCount, tot
                     <Type size={12} />
                     <span>{wordCount} words</span>
                     <span>{charCount} chars</span>
+                    <div className="w-px h-3 bg-border mx-2" />
+                    <List size={12} />
+                    <span>{totalLines} lines</span>
                 </div>
             </div>
         </div>

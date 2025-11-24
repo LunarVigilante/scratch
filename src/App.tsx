@@ -159,12 +159,16 @@ function App() {
             handleRedo();
             break;
         }
+      } else if (e.key === 'Escape') {
+        if (isFocusMode) {
+          setIsFocusMode(false);
+        }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [markdown, historyIndex, history]); // Dependencies for undo/redo/save
+  }, [markdown, historyIndex, history, isFocusMode]); // Dependencies for undo/redo/save
 
   // Initialize history
   useEffect(() => {
